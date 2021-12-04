@@ -1,35 +1,43 @@
 package com.myproduct.myproduct.configuration;
 
+import com.myproduct.myproduct.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private String userName;
+    private String username;
+    private String password;
+    private List<GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String userName){
-        this.userName = userName;
-    }
-    public UserDetailsImpl(){
+    public UserDetailsImpl(UserEntity user){
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.authorities = Arrays.stream(user.getUserRole().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return "pass";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override

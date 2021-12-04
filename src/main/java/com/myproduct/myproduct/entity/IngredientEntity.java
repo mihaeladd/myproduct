@@ -2,7 +2,6 @@ package com.myproduct.myproduct.entity;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "ingredient")
