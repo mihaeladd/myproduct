@@ -8,12 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -26,16 +25,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests() //authorize all request
+//        http.authorizeRequests() //authorize all request
+//                .antMatchers("/admin").hasRole("ADMIN") //allow only user has the role admin
+//                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+//                .antMatchers("/", "/register").permitAll() //allow for everyone
+//                .and().httpBasic();
+
+        http.csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/", "/register").permitAll()
                 .antMatchers("/admin").hasRole("ADMIN") //allow only user has the role admin
-                .antMatchers("/admin").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/").permitAll() //allow for everyone
-                .and().formLogin();
+                .antMatchers("/user").hasAnyRole("ADMIN", "USER")
+                .anyRequest().authenticated()
+                .and().httpBasic();
     }
 
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

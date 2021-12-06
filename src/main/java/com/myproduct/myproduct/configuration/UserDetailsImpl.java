@@ -22,7 +22,6 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = Arrays.stream(user.getUserRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-
     }
 
     @Override

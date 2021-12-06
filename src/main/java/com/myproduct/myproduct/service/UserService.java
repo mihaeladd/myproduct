@@ -3,10 +3,10 @@ package com.myproduct.myproduct.service;
 import com.myproduct.myproduct.configuration.UserDetailsImpl;
 import com.myproduct.myproduct.entity.UserEntity;
 import com.myproduct.myproduct.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,11 +14,12 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private final UserRepository userRepository; //trebuie sa fie final?
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -28,5 +29,11 @@ public class UserService implements UserDetailsService {
         user.orElseThrow(()-> new UsernameNotFoundException("Not found: "+ username));
 
         return user.map(UserDetailsImpl::new).get();
+    }
+
+    public void addNewUser(UserEntity userEntity) {
+        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
+        userEntity.setPassword(encodedPassword);
+        userRepository.save(userEntity);
     }
 }
