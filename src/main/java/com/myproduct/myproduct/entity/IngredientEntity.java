@@ -1,6 +1,8 @@
 package com.myproduct.myproduct.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -23,6 +25,17 @@ public class IngredientEntity {
 
     @Column(name = "rating")
     public String rating;
+
+    @ManyToMany(mappedBy = "ingredients")
+    private Set<ProductEntity> products = new HashSet<>();
+
+    public Set<ProductEntity> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductEntity> products) {
+        this.products = products;
+    }
 
     public IngredientEntity() {
     }
