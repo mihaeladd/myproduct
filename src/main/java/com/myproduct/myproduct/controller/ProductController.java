@@ -41,8 +41,13 @@ public class ProductController {
         productService.deleteProductByID(id);
     }
 
-    @GetMapping("/product/barcode/{barcode}")
+    @GetMapping("/products/barcode/{barcode}")
     public ProductResponse getProductByBarcode(@PathVariable String barcode){
         return productService.getProductByBarcode(barcode);
+    }
+
+    @DeleteMapping("/products/barcode/{barcode}")
+    public void deleteProduct(@PathVariable String barcode){
+        productService.deleteByBarcode(barcode);
     }
 }

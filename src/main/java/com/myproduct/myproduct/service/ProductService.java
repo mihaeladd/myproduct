@@ -8,6 +8,7 @@ import com.myproduct.myproduct.mapper.ProductMapper;
 import com.myproduct.myproduct.repository.IngredientRepository;
 import com.myproduct.myproduct.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
@@ -87,6 +88,14 @@ public class ProductService {
 
     public ProductResponse getProductByBarcode(String barcode) {
         ProductEntity foundProduct = productRepository.findProductByBarcode(barcode);
+        if (foundProduct == null){
+            return null;
+        }
         return productMapper.mapToDTO(foundProduct);
+    }
+
+    @Transactional
+    public void deleteByBarcode(String barcode) {
+        productRepository.deleteByBarcode(barcode);
     }
 }

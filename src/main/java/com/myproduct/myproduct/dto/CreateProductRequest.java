@@ -4,7 +4,6 @@ import java.util.List;
 
 public class CreateProductRequest {
 
-    private Long id;
     private String barcode;
     private String name;
     private String brand;
@@ -14,8 +13,7 @@ public class CreateProductRequest {
     public CreateProductRequest() {
     }
 
-    public CreateProductRequest(Long id, String barcode, String name, String producator, String category, List<String> ingredients) {
-        this.id = id;
+    public CreateProductRequest( String barcode, String name, String producator, String category, List<String> ingredients) {
         this.barcode = barcode;
         this.name = name;
         this.brand = producator;
@@ -29,14 +27,6 @@ public class CreateProductRequest {
 
     public void setBrand(String brand) {
         this.brand = brand;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getBarcode() {

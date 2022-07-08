@@ -9,4 +9,5 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     ProductEntity findProductByName(String name);
     ProductEntity findProductByBarcode(String barcode);
+    ProductEntity deleteByBarcode(String barcode);
 }
